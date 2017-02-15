@@ -18,6 +18,9 @@ const loutRegister = {
     options: { endpoint: '/docs' }
 };
 
+// Were we included from another file?
+const local = !module.parent;
+
 server.register([Vision, Inert, loutRegister], function(err) {
 
     if (err) {
@@ -27,9 +30,12 @@ server.register([Vision, Inert, loutRegister], function(err) {
 
     server.route(Routes);
     
-    server.start(function () {
-        console.log('Server running at:', server.info.uri);
-    });
+    // Only start listening for requests if running server locally
+    if (local) {
+        server.start(function () {
+            console.log('Server running at:', server.info.uri);
+        });
+    }
 });
 
 module.exports = server;
